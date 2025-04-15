@@ -32,22 +32,22 @@ It also serves as an exploration of scalable frontend-backend integration using 
 ## 📸 User Flow
 
 ```plaintext
-Home
-├── Create Frame 
-│   ├── Use Default Frame
+/ (Home)
+├── /create
+│   ├── /create/default
 │   │   ├── Step 1: Upload Photo
 │   │   ├── Step 2: Select Frame
 │   │   ├── Step 3: Preview
 │   │   └── Step 4: Download
 │   │
-│   └── Create Custom Frame
+│   └── /create/custom
 │       ├── Step 1: Design Frame
 │       ├── Step 2: Upload Photo
 │       ├── Step 3: Preview
 │       ├── Step 4: Download
 │       └── Step 5: (Optional) Share to Gallery
 │
-└── View Gallery
+└── /gallery (View Gallery)
 ```
 
 ## 📦 Folder Structure (simplified)
