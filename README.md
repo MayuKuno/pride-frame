@@ -1,5 +1,103 @@
-# Vue 3 + TypeScript + Vite
+# 🌈 Pride Frame
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Pride Frame is a fun and empowering web application that lets users upload their photos, add pride-themed frames, and download their creations to share as profile pictures on any social media platform.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## ✨ Features
+
+- **Image Upload, Frame Overlay, and Download**  
+  Upload your photo and choose from a variety of pride-themed frames (rainbow, trans, nonbinary, and more). Download your creation to use as a profile picture.
+
+- **Frame Customization**  
+  Design your own unique pride frame to express your identity.
+
+- **Gallery View**  
+  Share your creation anonymously and explore pride frames made by others for inspiration.
+
+## 🚀 Tech Stack
+A lightweight, scalable stack powered by Vue 3 and AWS serverless services.
+
+| Area        | Technology            |
+|-------------|------------------------|
+| Frontend    | Vue 3, TypeScript, Vite |
+| Backend     | AWS Lambda, API Gateway |
+| Storage     | Amazon S3              |
+| Database    | DynamoDB      |
+| Deployment  | Render  |
+
+## 🧠 Project Purpose
+
+This project was created to empower LGBTQ+ individuals and allies to express their identities proudly and creatively through visual media.
+It also serves as an exploration of scalable frontend-backend integration using modern serverless technologies.
+
+## 📸 User Flow
+
+```plaintext
+Home
+├── Create Frame 
+│   ├── Use Default Frame
+│   │   ├── Step 1: Upload Photo
+│   │   ├── Step 2: Select Frame
+│   │   ├── Step 3: Preview
+│   │   └── Step 4: Download
+│   │
+│   └── Create Custom Frame
+│       ├── Step 1: Design Frame
+│       ├── Step 2: Upload Photo
+│       ├── Step 3: Preview
+│       ├── Step 4: Download
+│       └── Step 5: (Optional) Share to Gallery
+│
+└── View Gallery
+```
+
+## 📦 Folder Structure (simplified)
+
+```bash
+src/
+├── assets/
+│   └── frames/
+│
+├── components/
+│   ├── common/  # Shared across flows
+│   │   ├── FrameSelector.vue
+│   │   ├── PhotoPreview.vue
+│   │   └── DownloadButton.vue
+│   │
+│   ├── default/ # Components for the default frame flow
+│   │   ├── UploadPhoto.vue
+│   │   └── SelectFrame.vue
+│   │
+│   └── custom/ # Components for the custom frame flow
+│       ├── FrameDesign.vue
+│       ├── UploadPhoto.vue
+│       ├── Preview.vue
+│       └── Share.vue
+│
+├── views/
+│   ├── Home.vue
+│   ├── CreateDefault.vue
+│   ├── CreateCustom.vue
+│   └── Gallery.vue
+│
+├── router/
+│   └── index.ts
+│
+├── utils/
+│   ├── canvasUtils.ts
+│   └── s3.ts
+│
+├── types/
+│   └── index.ts
+│
+├── App.vue
+└── main.ts
+```
+
+## 📄 License
+
+MIT License.  
+Feel free to remix, contribute, and celebrate pride through code!
+
+---
+
+Whether you’re here to build, explore, or celebrate — welcome, and enjoy creating 🌈
