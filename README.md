@@ -18,7 +18,7 @@ A lightweight, scalable stack powered by Vue 3 and AWS serverless services.
 
 | Area        | Technology            |
 |-------------|------------------------|
-| Frontend    | Vue 3, TypeScript, Vite |
+| Frontend    | Vue 3, TypeScript, Vuetify |
 | Backend     | AWS Lambda, API Gateway |
 | Storage     | Amazon S3              |
 | Database    | DynamoDB      |
@@ -60,6 +60,7 @@ src/
 ├── components/
 │   ├── common/  # Shared across flows
 │   │   ├── FrameSelector.vue
+│       ├── UploadPhoto.vue
 │   │   ├── PhotoPreview.vue
 │   │   └── DownloadButton.vue
 │   │
@@ -69,12 +70,12 @@ src/
 │   │
 │   └── custom/ # Components for the custom frame flow
 │       ├── FrameDesign.vue
-│       ├── UploadPhoto.vue
 │       ├── Preview.vue
 │       └── Share.vue
 │
 ├── views/
 │   ├── Home.vue
+│   ├── Create.vue
 │   ├── CreateDefault.vue
 │   ├── CreateCustom.vue
 │   └── Gallery.vue
