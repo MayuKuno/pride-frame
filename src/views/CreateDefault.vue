@@ -26,7 +26,7 @@
       <div class="relative mx-auto mb-4" :style="frameStyle">
         <canvas ref="previewCanvas" :width="canvasSize.width" :height="canvasSize.height" class="border d-block mx-auto" />
       </div>
-      <FrameSelector :selected="selectedFrame" @select="onSelectFrame" />
+      <FrameSelector :selected="selectedFrame" :canvasSize="canvasSize" @select="onSelectFrame" />
     </template>
 
     <template v-slot:item.4>
@@ -220,7 +220,7 @@ watch(selectedFile, file => {
 
 <style scoped>
 .stepper {
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f5f5f5;
 }
 
@@ -238,6 +238,8 @@ watch(selectedFile, file => {
 .actions {
   display: flex;
   position: relative;
+  padding-bottom: 64px;
+
 }
 
 .backToHome {

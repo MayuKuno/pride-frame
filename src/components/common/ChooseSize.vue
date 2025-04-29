@@ -12,10 +12,10 @@
         :class="cardClass(option.value)"
       >
         <img :src="option.icon" alt="" class="icon mt-4" />
-        <v-card-text class="text-center font-semibold card-contents">
+        <v-card-title class="text-center font-semibold card-contents">
           {{ option.label }}<br />
-          <small>{{ option.size }}</small>
-        </v-card-text>
+          {{ option.size }}
+        </v-card-title>
       </v-card>
 
       <v-card
@@ -25,40 +25,38 @@
         :class="cardClass('custom')"
       >
         <img src="/icons/custom.png" alt="Custom" class="icon mt-4" />
-        <v-card-text class="text-center font-semibold card-contents">
+        <v-card-title class="text-center font-semibold card-contents">
           Custom<br />
           <div class="flex flex-col items-center gap-2 p-4">
             <div class="flex gap-2 text-sm">
-              <small>
-                <input
-                  :value="customWidth"
-                  @input="updateWidth"
-                  type="number"
-                  min="100"
-                  max="1000"
-                  class="border rounded text-center w-20"
-                />
-                ×
-                <input
-                  :value="customHeight"
-                  @input="updateHeight"
-                  type="number"
-                  min="100"
-                  max="1000"
-                  class="border rounded text-center w-20"
-                />
-                <select
-                  :value="customShape"
-                  @change="updateShape"
-                  class="border rounded px-2 ml-2"
-                >
-                  <option value="round">⚪︎</option>
-                  <option value="square">◻︎</option>
-                </select>
-              </small>
+              <input
+                :value="customWidth"
+                @input="updateWidth"
+                type="number"
+                min="100"
+                max="1000"
+                class="border rounded text-center w-20"
+              />
+              ×
+              <input
+                :value="customHeight"
+                @input="updateHeight"
+                type="number"
+                min="100"
+                max="1000"
+                class="border rounded text-center w-20"
+              />
+              <select
+                :value="customShape"
+                @change="updateShape"
+                class="border rounded px-2 ml-2"
+              >
+                <option value="round">⚪︎</option>
+                <option value="square">◻︎</option>
+              </select>
             </div>
           </div>
-        </v-card-text>
+        </v-card-title>
       </v-card>
     </div>
   </div>
@@ -82,8 +80,8 @@ const emit = defineEmits<{
   (e: 'update:customShape', value: string): void
 }>()
 
-const cardBaseWidth = '180px'
-const cardBaseHeight = '160px'
+const cardBaseWidth = '300px'
+const cardBaseHeight = '260px'
 
 const isSelected = (value: string) => props.selectedSize === value
 
@@ -126,7 +124,7 @@ const updateShape = (e: Event) => {
   justify-content: space-evenly;
 }
 .icon {
-  width: 80px;
+  width: 140px;
 }
 .card-contents {
   position: absolute;
