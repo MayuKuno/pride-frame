@@ -35,15 +35,15 @@ It also serves as an exploration of scalable frontend-backend integration using 
 / (Home)
 ├── /create
 │   ├── /create/default
-│   │   ├── Step 1: Upload Photo
-│   │   ├── Step 2: Select Frame
-│   │   ├── Step 3: Preview
+│   │   ├── Step 1: Choose Size
+│   │   ├── Step 2: Upload & Adjust Photo
+│   │   ├── Step 3: Select Frame
 │   │   └── Step 4: Download
 │   │
 │   └── /create/custom
-│       ├── Step 1: Design Frame
-│       ├── Step 2: Upload Photo
-│       ├── Step 3: Preview
+│       ├── Step 1: Choose Size
+│       ├── Step 2: Design Frame
+│       ├── Step 3: Upload & Adjust Photo
 │       ├── Step 4: Download
 │       └── Step 5: (Optional) Share to Gallery
 │
