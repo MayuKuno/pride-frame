@@ -1,0 +1,160 @@
+<template>
+  <div class="relative mx-auto mb-4 mt-12" :style="getFrameStyle">
+    <canvas ref="previewCanvas" :width="canvasSize.width" :height="canvasSize.height" class="border d-block mx-auto" />
+  </div>
+
+  <v-row class="px-4" dense>
+    <template v-if="matchingFrames.length > 0">
+      <v-col
+        v-for="frame in matchingFrames"
+        :key="frame.name"
+        cols="12"
+        sm="6"
+        md="4"
+        class="d-flex justify-center"
+      >
+        <div
+          class="frame-card"
+          :class="{
+            'border-pink-500 shadow-lg scale-105 bg-white opacity-100': isSelected(frame.url),
+            'border-gray-300 bg-gray-200 opacity-50': !isSelected(frame.url)
+          }"
+        :elevation="isSelected(frame.url) ? 8 : 2"
+          @click="selectFrame(frame.url)"
+        >
+          <v-img :src="frame.url" height="360" width="360" cover class="rounded-t-xl" />
+          <div class="text-center text-caption py-2">{{ frame.name }}</div>
+        </div>
+      </v-col>
+    </template>
+
+    <template v-else>
+      <v-col cols="12" class="text-center py-10">
+        <div class="no-frame-message">
+          Oops! No ready-made frame for this size and shape...<br>
+          But hey — why not make your own?<br>
+          <v-btn to="/create/custom" append-icon="mdi-play" variant="tonal" class="mt-8">
+            Start from scratch from here
+          </v-btn>
+        </div>
+      </v-col>
+    </template>
+  </v-row>
+</template>
+
+<script setup lang="ts">
+import { computed, ref, watch, onMounted } from 'vue'
+
+const props = defineProps<{
+  canvasSize: { width: number; height: number; shape: string }
+  image: string | null
+}>()
+
+const selectedFrame = ref<string | null>(null)
+const isSelected = (value: string) => selectedFrame.value === value
+const previewCanvas = ref<HTMLCanvasElement | null>(null)
+
+const emit = defineEmits<{
+  (e: 'croppedImageWithFrame', dataUrl: string): void
+}>()
+
+const frames = [
+  { name: 'default', url: '/frames/default.png', width: 512, height: 512, shape: 'square' },
+  { name: 'default1', url: '/frames/default1.png', width: 512, height: 512, shape: 'square' },
+  { name: 'default3', url: '/frames/default3.png', width: 640, height: 640, shape: 'round' },
+  { name: 'Rainbow', url: '/frames/rainbow.png', width: 1000, height: 1000, shape: 'square' },
+  { name: 'Trans', url: '/frames/trans.png', width: 1000, height: 512, shape: 'square' },
+  { name: 'Bi', url: '/frames/nonbinary.png', width: 1000, height: 1000, shape: 'square' },
+]
+
+const matchingFrames = computed(() => {
+  const match = frames.filter(frame =>
+    frame.width === props.canvasSize.width &&
+    frame.height === props.canvasSize.height &&
+    frame.shape === props.canvasSize.shape
+  )
+  if (match.length > 0 && !selectedFrame.value) {
+    selectedFrame.value = match[0].url  // デフォルトフレーム
+  }
+  return match
+})
+
+function selectFrame(url: string) {
+  selectedFrame.value = url
+  updateCanvas()
+  emit('croppedImageWithFrame', url)
+}
+
+function updateCanvas() {
+  const canvas = previewCanvas.value
+  if (!canvas || !props.image) return
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+
+  canvas.width = props.canvasSize.width
+  canvas.height = props.canvasSize.height
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+  const baseImg = new Image()
+  baseImg.crossOrigin = 'anonymous'
+  baseImg.onload = () => {
+    ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height)
+
+    if (selectedFrame.value) {
+      const frameImg = new Image()
+      frameImg.onload = () => {
+        ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height)
+
+        const combinedDataUrl = canvas.toDataURL('image/png')
+        emit('croppedImageWithFrame', combinedDataUrl)
+      }
+      frameImg.src = selectedFrame.value
+    } else {
+      const combinedDataUrl = canvas.toDataURL('image/png')
+      emit('croppedImageWithFrame', combinedDataUrl)
+    }
+  }
+  baseImg.src = props.image
+}
+
+function preloadBaseImage() {
+  if (props.image) {
+    updateCanvas()
+  }
+}
+
+watch(() => props.image, preloadBaseImage)
+onMounted(preloadBaseImage)
+
+const getFrameStyle = computed(() => ({
+  width: `${props.canvasSize.width}px`,
+  height: `${props.canvasSize.height}px`,
+  backgroundColor: '#efece8ff',
+  borderRadius: props.canvasSize.shape === 'round' ? '9999px' : '0px',
+  overflow: 'hidden',
+  position: 'relative',
+}))
+</script>
+
+<style scoped>
+.frame-card {
+  width: 360px;
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  cursor: pointer;
+}
+
+.selected {
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.2);
+}
+
+.no-frame-message {
+  font-size: 1.2rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+</style>

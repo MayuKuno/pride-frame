@@ -16,12 +16,10 @@ import 'cropperjs/dist/cropper.css'
 
 const props = defineProps<{
   src: string
-  canvasSize: { width: number; height: number }
-  cropShape?: 'round' | 'square'
+  canvasSize: { width: number; height: number, shape: string }
 }>()
 
 const emits = defineEmits<{
-  (e: 'ready', cropper: Cropper): void
   (e: 'crop', croppedDataUrl: string): void
 }>()
 
@@ -31,7 +29,7 @@ let cropper: Cropper | null = null
 const wrapperStyle = computed(() => ({
   width: `${props.canvasSize.width}px`,
   height: `${props.canvasSize.height}px`,
-  borderRadius: props.cropShape === 'round' ? '50%' : '0',
+  borderRadius: props.canvasSize.shape === 'round' ? '50%' : '0',
   overflow: 'hidden',
   backgroundColor: '#e0e0e0',
 }))
@@ -55,7 +53,6 @@ const createCropper = () => {
     cropBoxResizable: false,
     ready: handleReady,
     crop: handleCrop,
-    zoom: handleZoom,
   })
 }
 
@@ -88,6 +85,7 @@ function handleReady() {
   })
 
   const cropBoxData = cropper.getCropBoxData()
+  
   cropper.setCanvasData({
     ...cropper.getCanvasData(),
     width: cropBoxData.width,
@@ -95,8 +93,7 @@ function handleReady() {
     left: cropBoxData.left,
     top: cropBoxData.top,
   })
-
-  emits('ready', cropper)
+  handleCrop()
 }
 
 function handleCrop() {
@@ -108,14 +105,12 @@ function handleCrop() {
     imageSmoothingQuality: 'high',
     fillColor: 'transparent',
   })
-
-  const finalCanvas = props.cropShape === 'round' ? createRoundCanvas(croppedCanvas) : croppedCanvas
+  if (croppedCanvas.width === 0 || croppedCanvas.height === 0) {
+    console.warn('Cropped canvas has zero size, skipping emit')
+    return
+  }
+  const finalCanvas = props.canvasSize.shape === 'round' ? createRoundCanvas(croppedCanvas) : croppedCanvas
   emits('crop', finalCanvas.toDataURL('image/png'))
-}
-
-function handleZoom() {
-  // 本番ではログなし！必要ならemitイベント飛ばす
-  // console.log('zoomed')
 }
 
 function createRoundCanvas(sourceCanvas: HTMLCanvasElement): HTMLCanvasElement {
@@ -140,11 +135,16 @@ function createRoundCanvas(sourceCanvas: HTMLCanvasElement): HTMLCanvasElement {
 function applyCropShape() {
   const viewBox = image.value?.parentElement?.querySelector('.cropper-view-box') as HTMLElement | null
   if (viewBox) {
-    viewBox.classList.toggle('round-view-box', props.cropShape === 'round')
+    viewBox.classList.toggle('round-view-box', props.canvasSize.shape === 'round')
   }
 }
 
 onMounted(initializeCropper)
+
+onBeforeUnmount(() => {
+  cropper?.destroy()
+  cropper = null
+})
 
 watch(() => props.src, (newSrc, oldSrc) => {
   if (newSrc && newSrc !== oldSrc) {
@@ -152,12 +152,9 @@ watch(() => props.src, (newSrc, oldSrc) => {
   }
 })
 
-watch(() => props.cropShape, applyCropShape)
+watch(() => props.canvasSize.shape, applyCropShape)
 
-onBeforeUnmount(() => {
-  cropper?.destroy()
-  cropper = null
-})
+
 </script>
 
 <style scoped>

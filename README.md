@@ -19,10 +19,12 @@ A lightweight, scalable stack powered by Vue 3 and AWS serverless services.
 | Area        | Technology            |
 |-------------|------------------------|
 | Frontend    | Vue 3, TypeScript, Vuetify |
-| Backend     | AWS Lambda, API Gateway |
+| Backend     | AWS Lambda, AppSync |
 | Storage     | Amazon S3              |
 | Database    | DynamoDB      |
-| Deployment  | Render  |
+| Hosting     | S3 + CloudFront                       |
+| Deployment  | Serverless Framework  |
+
 
 ## 🧠 Project Purpose
 
@@ -92,6 +94,19 @@ src/
 │
 ├── App.vue
 └── main.ts
+backend/
+├── serverless.yml   
+├── graphql/
+│   ├── schema.graphql    
+│   └── resolvers/      
+│
+├── functions/
+│   ├── signUploadUrl.ts      
+│   └── shareToGallery.ts   
+│
+└── utils/
+    ├── s3.ts                
+    └── dynamodb.ts             
 ```
 
 ## 📄 License

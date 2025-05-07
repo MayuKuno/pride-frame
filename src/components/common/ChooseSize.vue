@@ -1,33 +1,29 @@
 <template>
-  <div class="mt-6">
-    <h2 class="mb-6">Select a Frame Size</h2>
+  <div>
+    <h2 class="text-4xl font-bold text-center mb-6 text-gray-800">
+      What will you use the <span class="rainbow">Pride Frame</span> for?
+    </h2>
+    <p class="text-center text-lg mb-12 text-gray-600">
+      Pick a frame that’s perfectly sized for your platform, making sure your Pride Photo looks its best wherever you share it.
+    </p>
 
-    <div class="card-list">
+    <div style="display: flex; justify-content: space-evenly;">
       <v-card
         v-for="option in sizeOptions"
         :key="option.value"
-        @click="selectSize(option.value)"
+        class="pa-8 rounded-xl shadow-md border relative transition-all duration-300"
+        style="border-color: #EC4899; background-color: #FFFFFF; width:240px"
+        :class="{
+          'border-pink-500 shadow-lg scale-105 bg-white opacity-100': isSelected(option.value),
+          'border-gray-300 bg-gray-200 opacity-50': !isSelected(option.value)
+        }"
         :elevation="isSelected(option.value) ? 8 : 2"
-        :style="cardStyle(option.value, option.color)"
-        :class="cardClass(option.value)"
+        @click="selectSize(option.value)"
       >
-        <img :src="option.icon" alt="" class="icon mt-4" />
+        <div style="min-height: 140px;"><img :src="option.icon" alt="" class="mt-4" width="120px"/></div>
         <v-card-title class="text-center font-semibold card-contents">
           {{ option.label }}<br />
-          {{ option.size }}
-        </v-card-title>
-      </v-card>
-
-      <v-card
-        @click="selectSize('custom')"
-        :elevation="isSelected('custom') ? 8 : 2"
-        :style="cardStyle('custom')"
-        :class="cardClass('custom')"
-      >
-        <img src="/icons/custom.png" alt="Custom" class="icon mt-4" />
-        <v-card-title class="text-center font-semibold card-contents">
-          Custom<br />
-          <div class="flex flex-col items-center gap-2 p-4">
+          <div v-if="option.value === 'custom'">
             <div class="flex gap-2 text-sm">
               <input
                 :value="customWidth"
@@ -35,7 +31,8 @@
                 type="number"
                 min="100"
                 max="1000"
-                class="border rounded text-center w-20"
+                style="font-size: 12px;"
+                class="border rounded text-center"
               />
               ×
               <input
@@ -44,17 +41,22 @@
                 type="number"
                 min="100"
                 max="1000"
-                class="border rounded text-center w-20"
+                style="font-size: 12px;"
+                class="border rounded text-center w-12"
               />
               <select
                 :value="customShape"
                 @change="updateShape"
+                style="font-size: 12px;"
                 class="border rounded px-2 ml-2"
               >
                 <option value="round">⚪︎</option>
                 <option value="square">◻︎</option>
               </select>
             </div>
+          </div>
+          <div v-else>
+            {{ option.size }}
           </div>
         </v-card-title>
       </v-card>
@@ -63,75 +65,69 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { ref, computed, watch } from 'vue'
 
-const props = defineProps<{
-  selectedSize: 'instagram' | 'linkedin' | 'line' | 'slack' | 'custom'
-  customWidth: number
-  customHeight: number
-  customShape: 'round' | 'square'
-  sizeOptions: Array<{ value: string; label: string; size: string; color: string; icon: string }>
-}>()
+type SizeOption = 'instagram' | 'linkedin' | 'line' | 'slack' | 'custom'
+type ShapeOption = 'round' | 'square'
 
-const emit = defineEmits<{
-  (e: 'update:selectedSize', value: string): void
-  (e: 'update:customWidth', value: number): void
-  (e: 'update:customHeight', value: number): void
-  (e: 'update:customShape', value: string): void
-}>()
+const selectedSize = ref<SizeOption>('instagram')
+const customWidth = ref(600)
+const customHeight = ref(600)
+const customShape = ref<ShapeOption>('round')
 
-const cardBaseWidth = '300px'
-const cardBaseHeight = '260px'
-
-const isSelected = (value: string) => props.selectedSize === value
-
-const cardStyle = (value: string, color?: string) => ({
-  width: cardBaseWidth,
-  height: value === 'custom' && isSelected('custom') ? 'auto' : cardBaseHeight,
-  ...(isSelected(value) && color
-    ? { borderColor: color, borderWidth: '3px', borderStyle: 'solid' }
-    : {})
-})
-
-const cardClass = (value: string) => [
-  'cursor-pointer transition-all',
-  'min-w-[180px]',
-  isSelected(value)
-    ? 'border-4 border-primary shadow-2xl scale-110'
-    : 'border border-gray-300 hover:shadow-md'
+const sizeOptions = [
+  { value: 'instagram', label: 'For Instagram', size: '(320x320)', icon: '/icons/instagram.png' },
+  { value: 'linkedin', label: 'For LinkedIn', size: '(400x400)', icon: '/icons/linkedin.png' },
+  { value: 'line', label: 'For LINE', size: '(640x640)', icon: '/icons/line.png' },
+  { value: 'slack', label: 'For Slack', size: '(512x512)', icon: '/icons/slack.png' },
+  { value: 'custom', label: 'Custom', size: '', icon: '/icons/custom.png' },
 ]
 
-const selectSize = (value: string) => {
-  emit('update:selectedSize', value)
+const emit = defineEmits<{
+  (e: 'canvasSize', value: { width: number; height: number; shape: string }): void
+}>()
+
+const canvasSize = computed(() => {
+  const presets: Record<SizeOption, { width: number; height: number; shape: ShapeOption }> = {
+    instagram: { width: 320, height: 320, shape: 'round' },
+    linkedin: { width: 400, height: 400, shape: 'round' },
+    line: { width: 640, height: 640, shape: 'round' },
+    slack: { width: 512, height: 512, shape: 'square' },
+    custom: { width: customWidth.value, height: customHeight.value, shape: customShape.value },
+  }
+  return presets[selectedSize.value]
+})
+
+watch(canvasSize, (newVal) => {
+  emit('canvasSize', newVal)
+}, { immediate: true })
+
+const isSelected = (value: string) => selectedSize.value === value
+
+const selectSize = (value: SizeOption) => {
+  selectedSize.value = value
 }
 
 const updateWidth = (e: Event) => {
-  emit('update:customWidth', Number((e.target as HTMLInputElement).value))
+  customWidth.value = Number((e.target as HTMLInputElement).value)
 }
 
 const updateHeight = (e: Event) => {
-  emit('update:customHeight', Number((e.target as HTMLInputElement).value))
+  customHeight.value = Number((e.target as HTMLInputElement).value)
 }
 
 const updateShape = (e: Event) => {
-  emit('update:customShape', (e.target as HTMLSelectElement).value)
+  customShape.value = (e.target as HTMLSelectElement).value as ShapeOption
 }
 </script>
 
 <style scoped>
-.card-list {
-  display: flex;
-  justify-content: space-evenly;
-}
-.icon {
-  width: 140px;
-}
-.card-contents {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  padding-bottom: 8px;
-  width: 100%;
+.rainbow {
+  background: linear-gradient(90deg, #d8151c, #ed9b18, #d7c700, #52a8dd, #995292);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 24px;
 }
 </style>
