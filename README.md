@@ -4,22 +4,21 @@ Pride Frame is a fun and empowering web application that lets users upload their
 
 ## ✨ Features
 
-- **Image Upload, Frame Overlay, and Download**  
-  Upload your photo and choose from a variety of pride-themed frames (rainbow, trans, nonbinary, and more). Download your creation to use as a profile picture.
+- **Pride Profile Picture**
+  Combine your photo with a pride frame to create a profile picture for social media.
 
-- **Frame Customization**  
-  Design your own unique pride frame to express your identity.
+- **Upload Your Own Frame**
+  Upload a pride frame you’ve designed elsewhere and personalize your profile picture in your own way.
 
-- **Gallery View**  
-  Share your creation anonymously and explore pride frames made by others for inspiration.
+- **Explore the Gallery**
+  Explore a vibrant gallery of creations shared by others. Get inspired, celebrate diversity, and discover new pride expressions.
 
 ## 🚀 Tech Stack
-A lightweight, scalable stack powered by Vue 3 and AWS serverless services.
 
 | Area        | Technology            |
 |-------------|------------------------|
 | Frontend    | Vue 3, TypeScript, Vuetify |
-| Backend     | AWS Lambda, AppSync |
+| Backend     | AWS Lambda + API Gateway |
 | Storage     | Amazon S3              |
 | Database    | DynamoDB      |
 | Hosting     | S3 + CloudFront                       |
@@ -37,76 +36,61 @@ It also serves as an exploration of scalable frontend-backend integration using 
 / (Home)
 ├── /create
 │   ├── /create/default
-│   │   ├── Step 1: Choose Size
-│   │   ├── Step 2: Upload & Adjust Photo
-│   │   ├── Step 3: Select Frame
-│   │   └── Step 4: Download
+│   │   ├── Step 1: Upload & Adjust Photo
+│   │   ├── Step 2: Select Frame from Gallery
+│   │   ├── Step 3: Download (with optional SNS resizing)
 │   │
 │   └── /create/custom
-│       ├── Step 1: Choose Size
-│       ├── Step 2: Design Frame
-│       ├── Step 3: Upload & Adjust Photo
-│       ├── Step 4: Download
-│       └── Step 5: (Optional) Share to Gallery
+│       ├── Step 1: Upload & Adjust Photo
+│       ├── Step 2: Upload Your Own Pride Frame
+│       ├── Step 3: Download (with optional SNS resizing)
+│       └── Step 4: (Optional) Share to Gallery
 │
-└── /gallery (View Gallery)
+└── /gallery
 ```
 
 ## 📦 Folder Structure (simplified)
 
 ```bash
 src/
-├── assets/
-│   └── frames/
-│
 ├── components/
 │   ├── common/  # Shared across flows
-│   │   ├── FrameSelector.vue
-│       ├── UploadPhoto.vue
-│   │   ├── PhotoPreview.vue
-│   │   └── DownloadButton.vue
+│   │   ├── BackToHome.vue
+│   │   ├── ChooseSize.vue
+│   │   ├── Cropper.vue
+│   │   ├── DownloadImage.vue
+│   │   ├── StepperActions.vue
+│   │   └── UploadPhoto.vue
 │   │
 │   ├── default/ # Components for the default frame flow
-│   │   ├── UploadPhoto.vue
 │   │   └── SelectFrame.vue
 │   │
 │   └── custom/ # Components for the custom frame flow
-│       ├── FrameDesign.vue
-│       ├── Preview.vue
-│       └── Share.vue
+│       ├── ShareToGallery.vue
+│       └── UploadFrame.vue
 │
 ├── views/
-│   ├── Home.vue
 │   ├── Create.vue
-│   ├── CreateDefault.vue
 │   ├── CreateCustom.vue
-│   └── Gallery.vue
+│   ├── CreateDefault.vue
+│   ├── Gallery.vue
+│   ├── GalleryDetail.vue
+│   ├── Home.vue
+│   └── NotFound.vue
 │
 ├── router/
 │   └── index.ts
-│
-├── utils/
-│   ├── canvasUtils.ts
-│   └── s3.ts
-│
-├── types/
-│   └── index.ts
-│
 ├── App.vue
 └── main.ts
+
 backend/
-├── serverless.yml   
-├── graphql/
-│   ├── schema.graphql    
-│   └── resolvers/      
-│
 ├── functions/
-│   ├── signUploadUrl.ts      
-│   └── shareToGallery.ts   
-│
-└── utils/
-    ├── s3.ts                
-    └── dynamodb.ts             
+│   ├── getGalleryItem.ts
+│   ├── getGalleryItems.ts
+│   ├── shareToGallery.ts
+│   └── signUploadUrl.ts
+├── serverless.yml
+├── package.json
 ```
 
 ## 📄 License
