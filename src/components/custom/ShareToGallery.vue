@@ -8,7 +8,6 @@
   </p>
 
   <v-container class="py-10">
-    <!-- uploadedFrame を直接表示 -->
     <div v-if="props.uploadedFrame" class="mb-4 text-center">
       <img
         :src="props.uploadedFrame"
@@ -27,7 +26,19 @@
         required
       />
     </div>
-
+    <div class="mt-4 d-flex align-center justify-center">
+      <v-combobox
+        v-model="tags"
+        multiple
+        chips
+        clearable
+        :counter="5"
+        :rules="[v => tags.length <= 5 || 'Maximum 5 tags allowed']"
+        label="Tags (max 5)"
+        placeholder="e.g. pride, rainbow"
+        style="max-width: 620px;"
+      />
+    </div>
     <v-btn
       :disabled="!canSubmit"
       color="primary"
@@ -37,46 +48,79 @@
       Share to Gallery
     </v-btn>
   </v-container>
+
+  <v-dialog v-model="showDialog" max-width="400">
+    <v-card>
+      <v-card-title class="text-h6">Upload Successful 🎉</v-card-title>
+      <v-card-text>Do you want to go to the gallery page?</v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn text @click="showDialog = false">Stay</v-btn>
+        <v-btn color="primary" text @click="goToGallery">Go</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 
 const props = defineProps<{
   uploadedFrame: string | null
 }>()
 
-const finalImage = defineModel<string>('finalImage')
-
 const title = ref('')
-const nickname = ref('')
 const errorMessage = ref('')
+const showDialog = ref(false)
+const tags = ref<string[]>([])
 
 const canSubmit = computed(() =>
-  title.value.trim() !== ''
+  title.value.trim() !== '' && tags.value.length <= 5
 )
 
 const submit = async () => {
-  if (!canSubmit.value) return
+  if (!canSubmit.value || !props.uploadedFrame) return
 
   try {
-    await uploadToGallery({
-      image: finalImage.value,
-      title: title.value.trim(),
-      nickname: nickname.value.trim() || 'Anonymous',
+    const signRes = await fetch('https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/generate-upload-url', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: `${uuidv4()}.png`,
+        contentType: 'image/png',
+      }),
+    })
+    const { uploadUrl, objectUrl } = await signRes.json()
+
+    const blob = await (await fetch(props.uploadedFrame)).blob()
+
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'image/png' },
+      body: blob,
     })
 
-    window.location.href = '/gallery'
+    await fetch('https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/add-gallery-item', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: title.value.trim(),
+        imageUrl: objectUrl,
+        tags: tags.value,
+      }),
+    })
+
+    showDialog.value = true
+
   } catch (error) {
+    console.error(error)
     errorMessage.value = 'Failed to upload. Please try again later.'
   }
 }
 
-async function uploadToGallery(data: {
-  image: string
-  title: string
-  nickname: string
-}) {
+const goToGallery = () => {
+  window.location.href = '/gallery'
 }
 </script>
 

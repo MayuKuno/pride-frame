@@ -7,133 +7,109 @@
       <p class="text-subtitle-1 text-grey-darken-1 mb-8">
         Explore amazing Pride frame creations shared by the community.
       </p>
+      <v-container v-if="loading" class="text-center py-16">
+        <v-progress-circular color="blue-lighten-3" indeterminate size="128" :width="8"></v-progress-circular>
+      </v-container>
+      <v-container v-else>
+        <!-- Tag Filter Area -->
+        <v-row justify="center" class="mb-6">
+          <v-chip
+            class="ma-1"
+            :color="selectedTag === '' ? 'primary' : 'grey lighten-2'"
+            text-color="white"
+            small
+            @click="clearTagFilter"
+          >
+            Show All
+          </v-chip>
+          <v-chip
+            v-for="tag in allTags"
+            :key="tag"
+            class="ma-1"
+            :color="selectedTag === tag ? 'primary' : 'grey lighten-2'"
+            text-color="white"
+            small
+            @click="selectTag(tag)"
+          >
+            #{{ tag }}
+          </v-chip>
+        </v-row>
 
-      <!-- Tag Filter Area -->
-      <v-row justify="center" class="mb-6">
-        <v-chip
-          class="ma-1"
-          :color="selectedTag === '' ? 'primary' : 'grey lighten-2'"
-          text-color="white"
-          small
-          @click="clearTagFilter"
-        >
-          Show All
-        </v-chip>
-        <v-chip
-          v-for="tag in allTags"
-          :key="tag"
-          class="ma-1"
-          :color="selectedTag === tag ? 'primary' : 'grey lighten-2'"
-          text-color="white"
-          small
-          @click="selectTag(tag)"
-        >
-          #{{ tag }}
-        </v-chip>
-      </v-row>
+        <!-- Gallery Grid -->
+        <v-row dense>
+          <v-col
+            v-for="(frame, index) in filteredFrames"
+            :key="index"
+            cols="12"
+            sm="6"
+            md="4"
+            lg="3"
+          >
+            <v-card elevation="4" hover @click="goToDetail(frame.id)">
+              <v-img
+                :src="frame.imageUrl"
+                aspect-ratio="1"
+                alt="Pride frame"
+              ></v-img>
 
-      <!-- Gallery Grid -->
-      <v-row dense>
-        <v-col
-          v-for="(frame, index) in filteredFrames"
-          :key="index"
-          cols="12"
-          sm="6"
-          md="4"
-          lg="3"
-        >
-          <v-card elevation="4" hover>
-            <v-img
-              :src="frame.src"
-              aspect-ratio="1"
-              alt="Pride frame"
-            ></v-img>
+              <v-card-title class="mt-8 justify-center text-subtitle-1 font-weight-medium">
+                {{ frame.title }}
+              </v-card-title>
 
-            <v-card-title class="justify-center text-subtitle-1 font-weight-medium">
-              {{ frame.title }}
-            </v-card-title>
+              <v-card-actions class="justify-center flex-wrap">
+                <v-chip
+                  v-for="tag in frame.tags"
+                  :key="tag"
+                  size="x-small"
+                  class="ma-1"
+                  color="primary"
+                  text-color="white"
+                >
+                  #{{ tag }}
+                </v-chip>
+              </v-card-actions>
 
-            <v-card-actions class="justify-center flex-wrap">
-              <v-chip
-                v-for="tag in frame.tags"
-                :key="tag"
-                size="x-small"
-                class="ma-1"
-                color="primary"
-                text-color="white"
-              >
-                #{{ tag }}
-              </v-chip>
-            </v-card-actions>
-
-            <v-card-actions class="justify-center">
-              <v-btn icon @click="likeFrame(index)">
-                <v-icon color="pink">mdi-heart</v-icon>
-              </v-btn>
-              <span class="text-caption text-grey-darken-1">{{ frame.likes }}</span>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
+              <v-card-actions class="justify-center">
+                <v-btn icon @click="likeFrame(index)">
+                  <v-icon color="pink">mdi-heart</v-icon>
+                </v-btn>
+                <span class="text-caption text-grey-darken-1">{{ frame.likes }}</span>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-container>
     <BackToHome />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import BackToHome from '@/components/common/BackToHome.vue'
 
-const frames = reactive([
-  {
-    src: '/frames/nonbinary.png',
-    title: 'Rainbow Sunset',
-    tags: ['nonbinary', 'pride'],
-    width: 320,
-    height: 320,
-    shape: 'round',
-    likes: 12,
-  },
-  {
-    src: '/frames/rainbow.png',
-    title: 'Bold & Bright',
-    tags: ['rainbow', 'trans', 'nonbinary', 'pride', 'dfgdsff', 'bgfdhs'],
-    width: 500,
-    height: 500,
-    shape: 'square',
-    likes: 8,
-  },
-  {
-    src: '/frames/trans.png',
-    title: 'Classic Pride',
-    tags: ['trans', 'pride'],
-    width: 320,
-    height: 320,
-    shape: 'round',
-    likes: 20,
-  },
-  {
-    src: '/frames/trans.png',
-    title: 'Classic Pride',
-    tags: ['trans', 'pride'],
-    width: 320,
-    height: 320,
-    shape: 'round',
-    likes: 20,
-  },
-  {
-    src: '/frames/trans.png',
-    title: 'Classic Pride',
-    tags: ['trans', 'pride'],
-    width: 320,
-    height: 320,
-    shape: 'round',
-    likes: 20,
-  },
-])
-
+const router = useRouter()
+const frames = reactive<any[]>([])
 const selectedTag = ref('')
+const allTags = ref<string[]>([])
 
-const allTags = [...new Set(frames.flatMap(f => f.tags))]
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    const res = await fetch('https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/list-gallery-items')
+    const data = await res.json()
+    console.log(data)
+    frames.splice(0, frames.length, ...data)
+    allTags.value = [...new Set(data.flatMap((f: any) => f.tags))]
+  } catch (err) {
+    console.error('Failed to fetch gallery items', err)
+  } finally {
+    loading.value = false
+  }
+})
+
 
 function selectTag(tag: string) {
   selectedTag.value = tag
@@ -153,6 +129,10 @@ const filteredFrames = computed(() =>
   )
 )
 
+function goToDetail(id: string) {
+  router.push(`/gallery/${id}`)
+}
+
 </script>
 
 <style scoped>
@@ -166,6 +146,6 @@ const filteredFrames = computed(() =>
 :deep(.v-card-actions) {
   gap:0;
   padding:0;
-  min-height: 56px;
+  min-height: 0px;
 }
 </style>
