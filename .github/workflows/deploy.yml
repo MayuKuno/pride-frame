@@ -19,7 +19,7 @@ jobs:
 
       - name: Configure AWS credentials via OIDC
         id: configure-aws
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v2.1.0
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
@@ -48,7 +48,7 @@ jobs:
         with:
           args: --delete
         env:
-          AWS_S3_BUCKET: pride-frame-app-production
+          AWS_S3_BUCKET: pride-frame-web-production
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ steps.configure-aws.outputs.aws-access-key-id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.configure-aws.outputs.aws-secret-access-key }}
