@@ -28,7 +28,11 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install backend dependencies
+        working-directory: backend
         run: npm ci
 
       - name: Create .env.production from secrets
