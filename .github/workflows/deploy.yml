@@ -50,6 +50,9 @@ jobs:
         env:
           AWS_S3_BUCKET: pride-frame-app-production
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ steps.configure-aws.outputs.aws-access-key-id }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.configure-aws.outputs.aws-secret-access-key }}
+          AWS_SESSION_TOKEN: ${{ steps.configure-aws.outputs.aws-session-token }}
 
       - name: Invalidate CloudFront cache (optional)
         if: env.DISTRIBUTION_ID != ''
