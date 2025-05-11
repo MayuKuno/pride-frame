@@ -1,0 +1,56 @@
+name: Deploy to S3 and Invalidate CloudFront
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .env.production from secrets
+        run: |
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env.production
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@v0.5.1
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: pride-frame-app-production
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Invalidate CloudFront cache (optional)
+        if: ${{ secrets.DISTRIBUTION_ID != '' }}
+        uses: awact/cloudfront-action@v1
+        with:
+          distribution-id: ${{ secrets.DISTRIBUTION_ID }}
+          paths: '/*'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
