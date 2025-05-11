@@ -48,10 +48,9 @@ jobs:
 
       - name: Invalidate CloudFront cache (optional)
         if: env.DISTRIBUTION_ID != ''
-        uses: awact/cloudfront-action@v1
-        with:
-          distribution-id: ${{ env.DISTRIBUTION_ID }}
-          paths: '/*'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $DISTRIBUTION_ID \
+            --paths "/*"
         env:
           DISTRIBUTION_ID: ${{ secrets.DISTRIBUTION_ID }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
