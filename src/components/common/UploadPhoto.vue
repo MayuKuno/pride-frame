@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, CSSProperties} from 'vue'
 import Cropper from '@/components/common/Cropper.vue'
 
 const props = defineProps<{
@@ -72,7 +72,7 @@ const getFrameStyle = computed(() => ({
   borderRadius: props.canvasSize.shape === 'round' ? '9999px' : '0px',
   overflow: 'hidden',
   position: 'relative',
-}))
+} as CSSProperties))
 
 
 async function onFileInputChange(file: File | null) {

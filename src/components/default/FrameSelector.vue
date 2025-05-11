@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch, onMounted, CSSProperties } from 'vue'
 
 const props = defineProps<{
   canvasSize: { width: number; height: number; shape: string }
@@ -134,7 +134,7 @@ const getFrameStyle = computed(() => ({
   borderRadius: props.canvasSize.shape === 'round' ? '9999px' : '0px',
   overflow: 'hidden',
   position: 'relative',
-}))
+} as CSSProperties))
 </script>
 
 <style scoped>

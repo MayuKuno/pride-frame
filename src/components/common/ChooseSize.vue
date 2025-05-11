@@ -75,7 +75,7 @@ const customWidth = ref(600)
 const customHeight = ref(600)
 const customShape = ref<ShapeOption>('round')
 
-const sizeOptions = [
+const sizeOptions: { value: SizeOption; label: string; size: string; icon: string }[] = [
   { value: 'instagram', label: 'For Instagram', size: '(320x320)', icon: '/icons/instagram.png' },
   { value: 'linkedin', label: 'For LinkedIn', size: '(400x400)', icon: '/icons/linkedin.png' },
   { value: 'line', label: 'For LINE', size: '(640x640)', icon: '/icons/line.png' },

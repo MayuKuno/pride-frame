@@ -56,7 +56,8 @@ const loading = ref(true)
 onMounted(async () => {
   try {
     console.log(route.params.id)
-    const res = await fetch(`https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/get-gallery-item/${route.params.id}`)
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/get-gallery-item/${route.params.id}`)
+
     if (res.ok) {
       console.log(res)
 

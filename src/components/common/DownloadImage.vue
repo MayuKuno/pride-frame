@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch, CSSProperties } from 'vue'
 const props = defineProps<{
   canvasSize: { width: number; height: number; shape: string }
   croppedImageWithFrame: string | null
@@ -32,7 +32,7 @@ const getFrameStyle = computed(() => ({
   borderRadius: props.canvasSize.shape === 'round' ? '9999px' : '0px',
   overflow: 'hidden',
   position: 'relative',
-}))
+} as CSSProperties))
 
 function updateCanvas() {
   const canvas = previewCanvas.value

@@ -83,7 +83,7 @@ const submit = async () => {
   if (!canSubmit.value || !props.uploadedFrame) return
 
   try {
-    const signRes = await fetch('https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/generate-upload-url', {
+    const signRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/generate-upload-url`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -101,7 +101,7 @@ const submit = async () => {
       body: blob,
     })
 
-    await fetch('https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/add-gallery-item', {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL}/add-gallery-item`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

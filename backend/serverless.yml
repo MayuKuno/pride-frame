@@ -3,6 +3,7 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: ap-northeast-1
+  stage: ${opt:stage, 'dev'}
   httpApi:
     cors:
       allowedOrigins:
@@ -14,39 +15,37 @@ provider:
       allowedHeaders:
         - Content-Type
   environment:
-    BUCKET_NAME: pride-frame-images  # 環境変数：S3バケット名
-    TABLE_NAME: PrideFrameGallery    # 環境変数：DynamoDBテーブル名
+    BUCKET_NAME: pride-frame-images-${sls:stage}
+    TABLE_NAME: PrideFrameGallery-${sls:stage}
 
   iamRoleStatements:
-    # LambdaがS3にアクセスするための権限（オブジェクトのPUT/GET）
     - Effect: Allow
       Action:
         - s3:PutObject
         - s3:GetObject
-      Resource: arn:aws:s3:::pride-frame-images/*
-    # LambdaがDynamoDBにアクセスするための権限（アイテムの書き込み・全件取得）
+      Resource: arn:aws:s3:::pride-frame-images-${sls:stage}/*
     - Effect: Allow
       Action:
         - dynamodb:PutItem
         - dynamodb:Scan
         - dynamodb:GetItem
       Resource:
-        - arn:aws:dynamodb:ap-northeast-1:*:table/PrideFrameGallery
+        - arn:aws:dynamodb:ap-northeast-1:*:table/PrideFrameGallery-${sls:stage}
 
 functions:
   generateUploadUrl:
-    handler: functions/generateUploadUrl.handler  # S3の署名付きURLを生成するLambda関数
+    handler: functions/generateUploadUrl.handler
     events:
       - httpApi:
-          path: /generate-upload-url         
-          method: post                      
+          path: /generate-upload-url
+          method: post
 
   addGalleryItem:
-    handler: functions/addGalleryItem.handler # DynamoDBにギャラリー情報を保存するLambda関数
+    handler: functions/addGalleryItem.handler
     events:
       - httpApi:
-          path: /add-gallery-item       
-          method: post                     
+          path: /add-gallery-item
+          method: post
 
   listGalleryItems:
     handler: functions/listGalleryItems.handler
@@ -67,25 +66,25 @@ resources:
     PrideFrameGalleryTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: PrideFrameGallery        # 作成するDynamoDBテーブル名
+        TableName: PrideFrameGallery-${sls:stage}
         AttributeDefinitions:
-          - AttributeName: id               # プライマリキーの属性名
-            AttributeType: S                # プライマリキーのデータ型（文字列）
+          - AttributeName: id
+            AttributeType: S
         KeySchema:
-          - AttributeName: id               # プライマリキーの定義
+          - AttributeName: id
             KeyType: HASH
-        BillingMode: PAY_PER_REQUEST        # オンデマンド課金（プロビジョニング不要）
+        BillingMode: PAY_PER_REQUEST
 
     PrideFrameImagesBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: pride-frame-images      # 作成するS3バケット名
+        BucketName: pride-frame-images-${sls:stage}
         CorsConfiguration:
           CorsRules:
-            - AllowedHeaders: ['*']        # CORS設定：全てのヘッダーを許可
-              AllowedMethods: ['GET', 'PUT'] # CORS設定：GET・PUTメソッドを許可
-              AllowedOrigins: ['*']        # CORS設定：全オリジンを許可
-              MaxAge: 3000                 # プリフライトリクエストのキャッシュ時間（秒）
+            - AllowedHeaders: ['*']
+              AllowedMethods: ['GET', 'PUT']
+              AllowedOrigins: ['*']
+              MaxAge: 3000
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
           BlockPublicPolicy: false
@@ -101,4 +100,4 @@ resources:
             - Effect: Allow
               Principal: '*'
               Action: s3:GetObject
-              Resource: arn:aws:s3:::pride-frame-images/*
+              Resource: arn:aws:s3:::pride-frame-images-${sls:stage}/*

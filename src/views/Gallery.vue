@@ -98,11 +98,13 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('https://c51j80zys3.execute-api.ap-northeast-1.amazonaws.com/list-gallery-items')
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-gallery-items`)
     const data = await res.json()
     console.log(data)
     frames.splice(0, frames.length, ...data)
-    allTags.value = [...new Set(data.flatMap((f: any) => f.tags))]
+    allTags.value = [...new Set(
+      data.flatMap((f: any) => f.tags as string[])
+    )] as string[]
   } catch (err) {
     console.error('Failed to fetch gallery items', err)
   } finally {
