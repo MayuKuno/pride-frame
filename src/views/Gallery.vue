@@ -45,11 +45,13 @@
             md="4"
             lg="3"
           >
-            <v-card elevation="4" hover @click="goToDetail(frame.id)">
+            <v-card elevation="4">
               <v-img
                 :src="frame.imageUrl"
                 aspect-ratio="1"
                 alt="Pride frame"
+                class="clickable-image"
+                 @click="goToDetail(frame.id)"
               ></v-img>
 
               <v-card-title class="mt-8 justify-center text-subtitle-1 font-weight-medium">
@@ -70,10 +72,13 @@
               </v-card-actions>
 
               <v-card-actions class="justify-center">
-                <v-btn icon @click="likeFrame(index)">
-                  <v-icon color="pink">mdi-heart</v-icon>
+                <v-btn
+                  class="mt-2 mb-2"
+                  size="small"
+                  variant="tonal"
+                >
+                  Use This Frame
                 </v-btn>
-                <span class="text-caption text-grey-darken-1">{{ frame.likes }}</span>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -121,10 +126,6 @@ function clearTagFilter() {
   selectedTag.value = ''
 }
 
-function likeFrame(index: number) {
-  frames[index].likes++
-}
-
 const filteredFrames = computed(() =>
   frames.filter(f =>
     selectedTag.value === '' || f.tags.includes(selectedTag.value)
@@ -149,5 +150,8 @@ function goToDetail(id: string) {
   gap:0;
   padding:0;
   min-height: 0px;
+}
+.clickable-image {
+  cursor: pointer;
 }
 </style>

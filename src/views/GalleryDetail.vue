@@ -31,14 +31,27 @@
         </v-chip>
       </v-row>
       <div class="text-center mt-4 mb-8">
-        <v-icon color="pink" class="mr-1">mdi-heart</v-icon>
-        <span class="text-subtitle-2">{{ frame.likes }} likes</span>
+        <v-btn
+          class="mt-2 mb-2"
+          size="small"
+          variant="tonal"
+        >
+          Use This Frame
+        </v-btn>
       </div>
     </div>
 
     <div v-else>
       <p class="text-center">Item not found.</p>
     </div>
+    <v-btn
+      variant="outlined"
+      color="red"
+      size="x-small" 
+      :href="`https://forms.gle/PduwRtu1udHDCFTZ6`"
+      target="_blank">
+      Request Deletion
+    </v-btn>
     <BackToHome />
   </v-container>
 
@@ -55,7 +68,6 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    console.log(route.params.id)
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/get-gallery-item/${route.params.id}`)
 
     if (res.ok) {

@@ -22,7 +22,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       title,
       imageUrl,
       tags: tags || [],
-      likes: 0,
       createdAt: new Date().toISOString(),
     }
 
