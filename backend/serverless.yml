@@ -8,6 +8,7 @@ provider:
     cors:
       allowedOrigins:
         - http://localhost:5173
+        - https://dl1mzzuw9wm0m.cloudfront.net
       allowedMethods:
         - GET
         - POST

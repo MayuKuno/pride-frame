@@ -43,6 +43,10 @@ jobs:
       - name: Build app
         run: npm run build
 
+      - name: Deploy backend with Serverless
+        working-directory: backend
+        run: npx serverless deploy --stage production
+
       - name: Deploy to S3 (manual sync)
         run: aws s3 sync dist s3://pride-frame-web-production --delete
 
