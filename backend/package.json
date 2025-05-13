@@ -11,7 +11,7 @@
   "description": "",
   "dependencies": {
     "aws-sdk": "^2.1692.0",
-    "serverless": "^4.14.3"
+    "serverless": "^3.38.0"
   },
   "devDependencies": {
     "@types/aws-sdk": "^0.0.42",
