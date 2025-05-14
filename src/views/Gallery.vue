@@ -105,7 +105,6 @@ onMounted(async () => {
   try {
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-gallery-items`)
     const data = await res.json()
-    console.log(data)
     frames.splice(0, frames.length, ...data)
     allTags.value = [...new Set(
       data.flatMap((f: any) => f.tags as string[])

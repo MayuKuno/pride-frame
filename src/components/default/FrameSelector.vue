@@ -16,13 +16,13 @@
         <div
           class="frame-card"
           :class="{
-            'border-pink-500 shadow-lg scale-105 bg-white opacity-100': isSelected(frame.url),
-            'border-gray-300 bg-gray-200 opacity-50': !isSelected(frame.url)
+            'border-pink-500 shadow-lg scale-105 bg-white opacity-100': isSelected(frame.imageUrl),
+            'border-gray-300 bg-gray-200 opacity-50': !isSelected(frame.imageUrl)
           }"
-        :elevation="isSelected(frame.url) ? 8 : 2"
-          @click="selectFrame(frame.url)"
+        :elevation="isSelected(frame.imageUrl) ? 8 : 2"
+          @click="selectFrame(frame.imageUrl)"
         >
-          <v-img :src="frame.url" height="360" width="360" cover class="rounded-t-xl" />
+          <v-img :src="frame.imageUrl" height="360" width="360" cover class="rounded-t-xl" />
           <div class="text-center text-caption py-2">{{ frame.name }}</div>
         </div>
       </v-col>
@@ -58,31 +58,36 @@ const emit = defineEmits<{
   (e: 'croppedImageWithFrame', dataUrl: string): void
 }>()
 
-const frames = [
-  { name: 'default', url: '/frames/default.png', width: 512, height: 512, shape: 'square' },
-  { name: 'default1', url: '/frames/default1.png', width: 512, height: 512, shape: 'square' },
-  { name: 'default3', url: '/frames/default3.png', width: 640, height: 640, shape: 'round' },
-  { name: 'Rainbow', url: '/frames/rainbow.png', width: 1000, height: 1000, shape: 'square' },
-  { name: 'Trans', url: '/frames/trans.png', width: 1000, height: 512, shape: 'square' },
-  { name: 'Bi', url: '/frames/nonbinary.png', width: 1000, height: 1000, shape: 'square' },
-]
 
-const matchingFrames = computed(() => {
-  const match = frames.filter(frame =>
-    frame.width === props.canvasSize.width &&
-    frame.height === props.canvasSize.height &&
-    frame.shape === props.canvasSize.shape
-  )
-  if (match.length > 0 && !selectedFrame.value) {
-    selectedFrame.value = match[0].url  // デフォルトフレーム
+const frames = ref<Array<{ name: string; imageUrl: string; width: number; height: number; shape: string }>>([])
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-gallery-items`)
+
+    if (!res.ok) throw new Error('Failed to fetch frames')
+    const data = await res.json()
+    frames.value = data.map((item: any) => ({
+      name: item.title || 'Untitled',
+      imageUrl: item.imageUrl
+    }))
+
+  } catch (error) {
+    console.error('Error loading frames:', error)
   }
-  return match
 })
 
-function selectFrame(url: string) {
-  selectedFrame.value = url
+const matchingFrames = computed(() => {
+  if (frames.value.length > 0 && !selectedFrame.value) {
+    selectedFrame.value = frames.value[0].imageUrl
+  }
+  return frames.value
+})
+
+function selectFrame(imageUrl: string) {
+  selectedFrame.value = imageUrl
   updateCanvas()
-  emit('croppedImageWithFrame', url)
+  emit('croppedImageWithFrame', imageUrl)
 }
 
 function updateCanvas() {
