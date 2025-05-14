@@ -11,6 +11,8 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+import createGtag from 'vue-gtag-next';
+
 
 const vuetify = createVuetify({
   icons: {
@@ -24,7 +26,16 @@ const vuetify = createVuetify({
   directives,
 })
 
+const gtag = createGtag({
+  property: {
+    id: 'G-E8F69MK077',
+  },
+  useRouter: router,
+})
+
+
 createApp(App)
   .use(router)
   .use(vuetify)
+  .use(gtag)
   .mount('#app')
