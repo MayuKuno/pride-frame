@@ -6,6 +6,7 @@ import CreateCustom from '@/views/CreateCustom.vue'
 import Gallery from '@/views/Gallery.vue'
 import GalleryDetail from '@/views/GalleryDetail.vue'
 import NotFound from '@/views/NotFound.vue'
+import Privacy from '@/views/Privacy.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -14,7 +15,8 @@ const routes = [
   { path: '/create/custom', component: CreateCustom },
   { path: '/gallery', component: Gallery },
   { path: '/gallery/:id', component: GalleryDetail },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+  { path: '/privacy', name: 'Privacy', component: Privacy },
 ]
 
 export const router = createRouter({

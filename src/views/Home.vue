@@ -40,11 +40,6 @@
           </v-col>
         </v-row>
       </div>
-
-    <!-- Footer -->
-    <footer class="mt-auto py-6 text-center text-sm text-gray-600">
-      © 2025 Pride Frame. Made with love and pride.
-    </footer>
   </div>
 </template>
 
