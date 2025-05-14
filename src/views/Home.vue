@@ -21,7 +21,7 @@
       <h2 class="text-3xl font-bold text-center mb-10">What This App Offers</h2>
         <v-row justify="center" align="stretch" dense>
           <v-col cols="12" md="4" v-for="(step, index) in steps" :key="index">
-            <v-card class="pa-6 text-center hover elevation-4 transition">
+            <v-card class="pa-6 text-center hover elevation-4 transition card">
               <v-avatar size="80" class="mb-4" color="#F8F8F8">
                 <img :src="step.icon" alt="step icon" style="width: 100%; height: 100%; object-fit: contain;" />
               </v-avatar>
@@ -58,7 +58,7 @@ const steps = [
     icon: '/frame.png',
     title: 'Create Pride Frame Photo',
     description:
-      'Upload your photo, decorate it with a Pride frame, and proudly share it on social media.',
+      'Upload your photo, decorate it with a Pride frame, and proudly share it',
     link: '/create',
     buttonText: 'Start Creating',
     buttonColor: 'pink darken-2',
@@ -67,7 +67,7 @@ const steps = [
     icon: '/gallery.png',
     title: 'Explore the Community Gallery',
     description:
-      'Share your Pride creations and discover inspiring frames made by others in the community.',
+      'Share your Pride creations and discover inspiring frames made by others.',
     link: '/gallery',
     buttonText: 'Go to Gallery',
     buttonColor: 'purple darken-2',
@@ -103,6 +103,9 @@ const steps = [
   padding: 42px;
 }
 
+.card{
+  min-height: 308px;
+}
 .button-group {
   display: flex;
   flex-direction: column;
