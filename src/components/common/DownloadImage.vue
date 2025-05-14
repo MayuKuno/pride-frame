@@ -9,6 +9,9 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, CSSProperties } from 'vue'
+import { useGtag } from 'vue-gtag-next'
+const { event } = useGtag()
+
 const props = defineProps<{
   canvasSize: { width: number; height: number; shape: string }
   croppedImageWithFrame: string | null
@@ -23,6 +26,11 @@ function downloadImage() {
   link.href = canvas.toDataURL('image/png')
   link.download = 'prideframed.png'
   link.click()
+
+  event('download', {
+    event_category: 'interaction',
+    event_label: 'prideframed.png',
+  })
 }
 
 const getFrameStyle = computed(() => ({
