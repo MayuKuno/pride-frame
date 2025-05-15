@@ -64,14 +64,22 @@ const frames = ref<Array<{ name: string; imageUrl: string; width: number; height
 onMounted(async () => {
   try {
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/list-gallery-items`)
-
     if (!res.ok) throw new Error('Failed to fetch frames')
     const data = await res.json()
-    frames.value = data.map((item: any) => ({
-      name: item.title || 'Untitled',
-      imageUrl: item.imageUrl
-    }))
 
+    const useProxy = import.meta.env.DEV
+
+    frames.value = data.map((item: any) => {
+      const originalUrl: string = item.imageUrl
+      const imageUrl = useProxy
+        ? `/s3proxy${new URL(originalUrl).pathname}`
+        : originalUrl
+
+      return {
+        name: item.title || 'Untitled',
+        imageUrl
+      }
+    })
   } catch (error) {
     console.error('Error loading frames:', error)
   }
