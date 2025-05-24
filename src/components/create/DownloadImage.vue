@@ -1,13 +1,24 @@
 <template>
   <div class="relative mx-auto mb-4 mt-12" :style="getFrameStyle">
     <canvas
+      v-if="!showImageInsteadOfCanvas"
       ref="previewCanvas"
       :width="canvasSize.width"
       :height="canvasSize.height"
       class="border d-block mx-auto"
     />
+    <img
+      v-else
+      :src="generatedImageUrl"
+      :width="canvasSize.width"
+      :height="canvasSize.height"
+      class="border d-block mx-auto"
+      style="object-fit: cover"
+      alt="Generated frame preview"
+    />
   </div>
-  <div class="d-flex justify-center">
+
+  <div class="d-flex justify-center" v-if="!isMobile">
     <v-menu offset-y>
       <template #activator="{ props }">
         <v-btn color="primary" variant="tonal" class="ml-2 mt-8" v-bind="props">
@@ -21,9 +32,7 @@
               <template #activator="{ props: tooltipProps }">
                 <div v-bind="tooltipProps">
                   <v-list-item :disabled="true">
-                    <v-list-item-title>
-                      {{ option.label }}
-                    </v-list-item-title>
+                    <v-list-item-title>{{ option.label }}</v-list-item-title>
                   </v-list-item>
                 </div>
               </template>
@@ -31,23 +40,26 @@
             </v-tooltip>
           </div>
 
-          <v-list-item
-            v-else
-            @click="downloadImage(option)"
-          >
+          <v-list-item v-else @click="downloadImage(option)">
             <v-list-item-title>{{ option.label }}</v-list-item-title>
           </v-list-item>
         </template>
-
       </v-list>
     </v-menu>
+  </div>
+
+  <div v-if="showImageInsteadOfCanvas && isMobile" class="text-center mt-4">
+    <div class="text-subtitle-1">Tap and hold the image to save it to your Photos</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, CSSProperties } from 'vue'
+import { computed, ref, onMounted, watch, CSSProperties, nextTick } from 'vue'
 import { useGtag } from 'vue-gtag-next'
 const { event } = useGtag()
+const isMobile = computed(() => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
+const generatedImageUrl = ref<string | null>(null)
+const showImageInsteadOfCanvas = ref(false)
 
 const props = defineProps<{
   canvasSize: { width: number; height: number; shape: string }
@@ -123,9 +135,8 @@ function downloadImage(option: { label: string; width: number; height: number })
       event_label: option.label,
     })
   }
-  img.src = props.croppedImageWithFrame
+  img.src = props.croppedImageWithFrame!
 }
-
 
 const getFrameStyle = computed(() => ({
   width: `${props.canvasSize.width}px`,
@@ -142,18 +153,31 @@ function updateCanvas() {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  canvas.width = props.canvasSize.width
-  canvas.height = props.canvasSize.height
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-
   const baseImg = new Image()
   baseImg.crossOrigin = 'anonymous'
   baseImg.onload = () => {
+    canvas.width = props.canvasSize.width
+    canvas.height = props.canvasSize.height
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height)
+
+    if (isMobile.value) {
+      generatedImageUrl.value = canvas.toDataURL('image/png')
+      showImageInsteadOfCanvas.value = true
+    }
   }
   baseImg.src = props.croppedImageWithFrame
 }
 
-watch(() => props.croppedImageWithFrame, updateCanvas)
-onMounted(updateCanvas)
+watch(
+  () => props.croppedImageWithFrame,
+  () => {
+    updateCanvas()
+  },
+  { immediate: true }
+)
+
+onMounted(() => {
+  updateCanvas()
+})
 </script>
