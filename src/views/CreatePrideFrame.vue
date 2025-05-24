@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="step" :items="stepItems" show-actions class="pa-6 min-h-screen flex flex-col stepper">
+  <v-stepper v-model="step" :items="stepItems" show-actions class="pa-2 min-h-screen flex flex-col stepper">
     <template v-slot:item.1>
       <UploadPhoto
         ref="uploadPhotoRef"
@@ -50,8 +50,8 @@ const route = useRoute()
 const step = ref(1)
 const stepItems = ['Upload & Adjust Photo', 'Select Frame', 'Download']
 const canvasSize = ref({
-  width: 420,
-  height: 420,
+  width: 360,
+  height: 360,
   shape: 'round'
 })
 const frameId = route.query.frameId

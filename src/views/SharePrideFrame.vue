@@ -15,7 +15,7 @@
         />
       </div>
       <div v-else class="relative mx-auto mb-4 mt-6" :style="getFrameStyle">
-        <canvas ref="previewCanvas" :width="420" :height="420" class="border d-block mx-auto" />
+        <canvas ref="previewCanvas" :width="320" :height="320" class="border d-block mx-auto" />
       </div>
       <div class="mt-4 d-flex align-center justify-center">
         <v-file-input
@@ -181,8 +181,8 @@ watch(file, async (newFile) => {
   }
 })
 const getFrameStyle = computed(() => ({
-  width: `420px`,
-  height: `420px`,
+  width: `320px`,
+  height: `320px`,
   backgroundColor: '#efece8ff',
   borderRadius: '9999px',
   overflow: 'hidden',

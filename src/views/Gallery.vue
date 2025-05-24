@@ -54,7 +54,7 @@
                  @click="goToDetail(frame.id)"
               ></v-img>
 
-              <v-card-title class="mt-8 justify-center text-subtitle-1 font-weight-medium">
+              <v-card-title class="mt-2 justify-center text-subtitle-1 font-weight-medium">
                 {{ frame.title }}
               </v-card-title>
 
