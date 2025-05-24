@@ -1,0 +1,41 @@
+{
+  "name": "pride-frame",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "aws-sdk": "^2.1692.0",
+    "cropperjs": "^1.5.13",
+    "node-fetch": "^2.7.0",
+    "uuid": "^11.1.0",
+    "vite-plugin-vuetify": "^2.1.1",
+    "vue": "^3.5.13",
+    "vue-gtag-next": "^1.14.0",
+    "vue-router": "^4.5.0",
+    "vuetify": "^3.8.0-beta.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
+    "@types/node": "^22.15.21",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "vue-tsc": "^2.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "vue-tsc --noEmit"
+    ]
+  }
+}
