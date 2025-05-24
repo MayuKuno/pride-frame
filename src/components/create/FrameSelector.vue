@@ -137,7 +137,7 @@ function updateCanvas() {
 
     if (selectedFrame.value) {
       const frameImg = new Image()
-      frameImg.crossOrigin = 'anonymous'
+      // frameImg.crossOrigin = 'anonymous'
       frameImg.onload = () => {
         ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height)
 
