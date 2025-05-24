@@ -84,7 +84,7 @@ onMounted(async () => {
 
       const imageUrl = useProxy
         ? `/s3proxy${new URL(originalUrl).pathname}`
-        : originalUrl
+        : `https://dl1mzzuw9wm0m.cloudfront.net${new URL(originalUrl).pathname}`
 
       return {
         name: item.title || 'Untitled',
