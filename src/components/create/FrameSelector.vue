@@ -8,7 +8,7 @@
       <v-col
         v-for="frame in matchingFrames"
         :key="frame.name"
-        cols="12"
+        cols="4"
         sm="6"
         md="4"
         class="d-flex justify-center"
@@ -22,8 +22,7 @@
         :elevation="isSelected(frame.imageUrl) ? 8 : 2"
           @click="selectFrame(frame.imageUrl)"
         >
-          <v-img :src="frame.imageUrl" height="360" width="360" cover class="rounded-t-xl" />
-          <div class="text-center text-caption py-2">{{ frame.name }}</div>
+          <v-img :src="frame.imageUrl" aspect-ratio="1" cover class="rounded-t-xl" />
         </div>
       </v-col>
     </template>
@@ -184,6 +183,12 @@ const getFrameStyle = computed(() => ({
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
   cursor: pointer;
+}
+
+@media (min-width: 960px) {
+  .frame-card {
+    max-width: 360px;
+  }
 }
 
 .selected {
