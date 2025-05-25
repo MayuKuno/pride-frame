@@ -1,0 +1,61 @@
+name: Deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials via OIDC
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v2.1.0
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Create .env.production from secrets
+        run: |
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env.production
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy backend with Serverless
+        working-directory: backend
+        run: npx serverless deploy --stage production
+
+      - name: Deploy to S3 (manual sync)
+        run: aws s3 sync dist s3://pride-frame-web-production --delete
+
+      - name: Invalidate CloudFront cache (optional)
+        if: env.DISTRIBUTION_ID != ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $DISTRIBUTION_ID \
+            --paths "/*"
+        env:
+          DISTRIBUTION_ID: ${{ secrets.DISTRIBUTION_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
