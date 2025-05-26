@@ -35,62 +35,15 @@ It also serves as an exploration of scalable frontend-backend integration using 
 ```plaintext
 / (Home)
 ├── /create
-│   ├── /create/default
+│   ├── /create
 │   │   ├── Step 1: Upload & Adjust Photo
 │   │   ├── Step 2: Select Frame from Gallery
-│   │   ├── Step 3: Download (with optional SNS resizing)
+│   │   ├── Step 3: Download
 │   │
-│   └── /create/custom
-│       ├── Step 1: Upload & Adjust Photo
-│       ├── Step 2: Upload Your Own Pride Frame
-│       ├── Step 3: Download (with optional SNS resizing)
-│       └── Step 4: (Optional) Share to Gallery
+│   └── /share
 │
 └── /gallery
-```
-
-## 📦 Folder Structure (simplified)
-
-```bash
-src/
-├── components/
-│   ├── common/  # Shared across flows
-│   │   ├── BackToHome.vue
-│   │   ├── ChooseSize.vue
-│   │   ├── Cropper.vue
-│   │   ├── DownloadImage.vue
-│   │   ├── StepperActions.vue
-│   │   └── UploadPhoto.vue
-│   │
-│   ├── default/ # Components for the default frame flow
-│   │   └── SelectFrame.vue
-│   │
-│   └── custom/ # Components for the custom frame flow
-│       ├── ShareToGallery.vue
-│       └── UploadFrame.vue
-│
-├── views/
-│   ├── Create.vue
-│   ├── CreateCustom.vue
-│   ├── CreateDefault.vue
-│   ├── Gallery.vue
-│   ├── GalleryDetail.vue
-│   ├── Home.vue
-│   └── NotFound.vue
-│
-├── router/
-│   └── index.ts
-├── App.vue
-└── main.ts
-
-backend/
-├── functions/
-│   ├── getGalleryItem.ts
-│   ├── getGalleryItems.ts
-│   ├── shareToGallery.ts
-│   └── signUploadUrl.ts
-├── serverless.yml
-├── package.json
+    └── /gallery/{id}
 ```
 
 ## 📄 License
