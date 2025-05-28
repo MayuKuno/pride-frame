@@ -4,7 +4,7 @@
     <div class="hero text-center">
       <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-gray-800"><span class="rainbow">Pride Frame</span></h1>
       <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
-        Celebrate your identity. Upload your favorite photo, choose a pride-inspired frame, and share your creation with pride.
+        Be proud of your story. Pick a photo that feels like you, decorate it with a Pride frame, and let it shine.
       </p>
     </div>
 
