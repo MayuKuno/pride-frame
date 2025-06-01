@@ -129,7 +129,7 @@ const steps = [
   },
   {
     icon: '/frame.png',
-    type: 'Main future',
+    type: 'Main feature',
     title: 'Create Pride Frame Photo',
     description:
       'Upload your photo, decorate it with a Pride frame, and proudly share it',
