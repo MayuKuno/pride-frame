@@ -5,9 +5,11 @@ import { v4 as uuidv4 } from 'uuid'
 import fetch from 'node-fetch'
 
 // npx tsx add-default-frame.ts
+// export AWS_ACCESS_KEY_ID=
+// export AWS_SECRET_ACCESS_KEY=
 
-const API_BASE_URL = ''
-const AWS_BUCKET_NAME = ''
+// const API_BASE_URL = ''
+// const AWS_BUCKET_NAME = ''
 const AWS_REGION = 'ap-northeast-1'
 
 AWS.config.update({ region: AWS_REGION })
@@ -17,52 +19,185 @@ const localFrames = [
   {
     title: '#PRIDE',
     file: '1.png',
-    tags: ['pride', 'LGBTQ+'],
-    message: 'Celebrate love, diversity, and being unapologetically yourself. 🌈',
+    tags: ['pride', 'rainbow'],
+    message: "Show your colors with pride.",
   },
   {
-    title: 'I Support',
+    title: 'I SUPPORT',
     file: '2.png',
-    tags: ['LGBTQ+', 'ally'],
-    message: 'I stand with the LGBTQ+ community — always and proudly.',
+    tags: ['ally', 'pride'],
+    message: "Standing with the LGBTQ+ community.",
   },
   {
-    title: 'Trans rights are human rights',
+    title: 'I SUPPORT Trans Rights',
     file: '3.png',
+    tags: ['ally', 'trans'],
+    message: "Trans rights are human rights.",
+  },
+  {
+    title: 'Trans Rights Are Human Rights',
+    file: '4.png',
     tags: ['trans'],
-    message: 'Trans lives matter. Your identity is valid and powerful.',
+    message: "No debate. Just rights.",
   },
   {
     title: 'Ally',
-    file: '4.png',
-    tags: ['LGBTQ', 'ally'],
-    message: 'Together, we build a world of acceptance and love.',
+    file: '5.png',
+    tags: ['ally'],
+    message: "Here with love and support.",
   },
   {
-    title: 'I support - square',
-    file: '5.png',
-    tags: ['LGBTQ', 'ally'],
-    message: 'Every voice of support matters. Let’s uplift each other.',
+    title: 'I SUPPORT',
+    file: '6.png',
+    tags: ['ally', 'pride'],
+    message: "Proud to be an ally.",
+  },
+  {
+    title: 'I SUPPORT Trans Rights',
+    file: '7.png',
+    tags: ['ally'],
+    message: "Standing with the LGBTQ+ community.",
   },
   {
     title: '#lovewins',
-    file: '6.png',
-    tags: ['lovewins'],
-    message: 'Love always wins. Keep shining with pride. 💖',
-  },
-  {
-    title: '#PRIDE - square',
-    file: '7.png',
-    tags: ['pride', 'LGBTQ+'],
-    message: 'Pride is a celebration, a protest, and a promise of progress.',
-  },
-  {
-    title: '#lovewins - square',
     file: '8.png',
-    tags: ['lovewins'],
-    message: 'Share your joy. Share your pride. Share your love.',
+    tags: ['equality'],
+    message: "Love always wins.",
+  },
+  {
+    title: 'Marriage Equality',
+    file: '9.png',
+    tags: ['equality'],
+    message: "I support marriage equality.",
+  },
+  {
+    title: '#PRIDE',
+    file: '10.png',
+    tags: ['pride', 'rainbow'],
+    message: "Celebrate who you are.",
+  },
+  {
+    title: '#lovewins',
+    file: '11.png',
+    tags: ['equality'],
+    message: "Marriage equality matters.",
+  },
+  {
+    title: '#lovewins',
+    file: '12.png',
+    tags: ['equality'],
+    message: "Marriage equality matters.",
+  },
+  {
+    title: 'Trans Rights',
+    file: '13.png',
+    tags: ['trans'],
+    message: "Trans rights are human rights.",
+  },
+  {
+    title: 'My pronouns are They/Them',
+    file: '14.png',
+    tags: ['nonbinary'],
+    message: "They/Them and proud.",
+  },
+  {
+    title: 'My pronouns are They/Them',
+    file: '15.png',
+    tags: ['nonbinary'],
+    message: "Respect my pronouns.",
+  },
+  {
+    title: '誇り月間',
+    file: '16.png',
+    tags: ['pride', 'rainbow'],
+    message: "Pride in every color.",
+  },
+  {
+    title: '誇り月間',
+    file: '17.png',
+    tags: ['pride', 'rainbow'],
+    message: "Be proud. Be visible.",
+  },
+  {
+    title: 'QUEER with PRIDE',
+    file: '18.png',
+    tags: ['pride', 'queer'],
+    message: "Queer and proud, always.",
+  },
+  {
+    title: 'Bi Visibility',
+    file: '19.png',
+    tags: ['pride', 'bisexual'],
+    message: "Celebrating with bi pride.",
+  },
+  {
+    title: 'Bi Visibility',
+    file: '20.png',
+    tags: ['pride', 'bisexual'],
+    message: "Bi people deserve the spotlight.",
+  },
+  {
+    title: 'Protect Trans Lives',
+    file: '21.png',
+    tags: ['pride', 'trans'],
+    message: "Protect trans lives",
+  },
+  {
+    title: 'Protect Trans Lives',
+    file: '22.png',
+    tags: ['pride', 'trans'],
+    message: "Protect trans lives",
+  },
+  {
+    title: 'Break the Binary',
+    file: '23.png',
+    tags: ['pride', 'nonbinary'],
+    message: "Beyond the binary, with pride.",
+  },
+  {
+    title: 'Break the Binary',
+    file: '24.png',
+    tags: ['pride', 'nonbinary'],
+    message: "Break the binary, live freely.",
+  },
+  {
+    title: 'Not Just a Phase',
+    file: '25.png',
+    tags: ['pride', 'lesbian'],
+    message: "Proud to love as I do.",
+  },
+  {
+    title: 'Not Just a Phase',
+    file: '26.png',
+    tags: ['pride', 'lesbian'],
+    message: "Lesbian love is real.",
+  },
+  {
+    title: 'Ace Folks Belong',
+    file: '27.png',
+    tags: ['pride', 'asexual'],
+    message: "Ace pride belongs here too.",
+  },
+  {
+    title: 'Ace Folks Belong',
+    file: '28.png',
+    tags: ['pride', 'asexual'],
+    message: "Ace folks belong here.",
+  },
+  {
+    title: "I'm Your Ally",
+    file: '29.png',
+    tags: ['pride', 'ally'],
+    message: "With you, as an ally.",
+  },
+  {
+    title: "I'm Your Ally",
+    file: '30.png',
+    tags: ['pride', 'ally'],
+    message: "Here with pride and support.",
   },
 ]
+
 
 async function uploadToS3(localPath: string, key: string): Promise<string> {
   const fileContent = fs.readFileSync(localPath)
