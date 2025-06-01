@@ -8,8 +8,8 @@ import fetch from 'node-fetch'
 // export AWS_ACCESS_KEY_ID=
 // export AWS_SECRET_ACCESS_KEY=
 
-// const API_BASE_URL = ''
-// const AWS_BUCKET_NAME = ''
+const API_BASE_URL = ''
+const AWS_BUCKET_NAME = ''
 const AWS_REGION = 'ap-northeast-1'
 
 AWS.config.update({ region: AWS_REGION })
