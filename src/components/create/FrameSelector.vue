@@ -16,8 +16,7 @@
         <div
           class="frame-card"
           :class="{
-            'border-pink-500 shadow-lg scale-105 bg-white opacity-100': isSelected(frame.imageUrl),
-            'border-gray-300 bg-gray-200 opacity-50': !isSelected(frame.imageUrl)
+            'opacity-50': !isSelected(frame.imageUrl)
           }"
         :elevation="isSelected(frame.imageUrl) ? 8 : 2"
           @click="selectFrame(frame.imageUrl)"
@@ -177,7 +176,7 @@ const getFrameStyle = computed(() => ({
 <style scoped>
 .frame-card {
   width: 360px;
-  background-color: white;
+  background-color: #eeeeee;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);

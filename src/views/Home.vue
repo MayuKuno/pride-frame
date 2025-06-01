@@ -64,13 +64,15 @@
           lg="3"
         >
           <v-card elevation="4">
-            <v-img
-              :src="frame.imageUrl"
-              aspect-ratio="1"
-              alt="Pride frame"
-              class="clickable-image"
-                @click="goToDetail(frame.id)"
-            ></v-img>
+            <div class="frame-preview-wrapper">
+              <v-img
+                :src="frame.imageUrl"
+                aspect-ratio="1"
+                alt="Pride frame"
+                class="clickable-image"
+                  @click="goToDetail(frame.id)"
+              ></v-img>
+            </div>
             <v-card-actions class="justify-center">
               <v-btn
                 class="mt-2 mb-2"
@@ -217,5 +219,9 @@ function useThisFrame(frame: any) {
   background-clip: text;
   color: transparent;
   margin-bottom: 24px;
+}
+
+.frame-preview-wrapper {
+  background-color: #eaeaea;
 }
 </style>

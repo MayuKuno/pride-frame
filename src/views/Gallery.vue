@@ -46,14 +46,15 @@
             lg="3"
           >
             <v-card elevation="4">
-              <v-img
-                :src="frame.imageUrl"
-                aspect-ratio="1"
-                alt="Pride frame"
-                class="clickable-image"
-                 @click="goToDetail(frame.id)"
-              ></v-img>
-
+              <div class="frame-preview-wrapper">
+                <v-img
+                  :src="frame.imageUrl"
+                  aspect-ratio="1"
+                  alt="Pride frame"
+                  class="clickable-image"
+                  @click="goToDetail(frame.id)"
+                ></v-img>
+              </div>
               <v-card-title class="mt-2 justify-center text-subtitle-1 font-weight-medium">
                 {{ frame.title }}
               </v-card-title>
@@ -161,5 +162,9 @@ function useThisFrame(frame: any) {
 }
 .clickable-image {
   cursor: pointer;
+}
+
+.frame-preview-wrapper {
+  background-color: #eaeaea;
 }
 </style>

@@ -7,12 +7,14 @@
       Wanna share your frame with the world? Add it to the gallery and spread the pride! 🌟
     </p>
     <div class="py-8">
-      <div v-if="uploadedFrameUrl" class="mb-4 text-center">
-        <img
-          :src="uploadedFrameUrl"
-          alt="Uploaded Frame Preview"
-          style="max-width: 100%; height: auto;"
-        />
+      <div v-if="uploadedFrameUrl" class="mb-4 text-center" style="display:flex; justify-content: center;">
+        <div class="frame-preview-wrapper">
+          <img
+            :src="uploadedFrameUrl"
+            alt="Uploaded Frame Preview"
+            style="max-width: 100%; height: auto;"
+          />
+        </div>
       </div>
       <div v-else class="relative mx-auto mb-4 mt-6" :style="getFrameStyle">
         <canvas ref="previewCanvas" :width="320" :height="320" class="border d-block mx-auto" />
@@ -249,5 +251,8 @@ const goToGallery = () => {
 <style scoped>
 .v-card-title {
   justify-content: center;
+}
+.frame-preview-wrapper {
+  background-color: #eaeaea;
 }
 </style>
