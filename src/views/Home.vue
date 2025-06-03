@@ -95,6 +95,55 @@
         </v-btn>
       </div>
     </v-container>
+
+    <!-- Message Section -->
+    <v-container class="py-12">
+      <v-row justify="center">
+        <v-col cols="12" md="8">
+          <h2 class="font-weight-bold text-center mb-4">
+            The story behind Pride Frame
+          </h2>
+          <p class="text-subtitle-1 text-center text-grey mb-8 font-italic">
+            Celebrating Pride Month in my own way — through building
+          </p>
+          <v-card flat class="pa-6" color="#FAFAFA" elevation="0">
+            <p class="mb-6">
+              I’m non-binary and a lesbian.<br>
+              But those words didn’t always come easily<br>
+            </p>
+            <p class="mb-6">
+              Loving myself hasn’t always been easy.<br>
+              And to be honest, it still isn’t, sometimes. <br><br> 
+              But little by little, I’ve been learning to be prouder —  
+              and a bit kinder to myself.
+            </p>
+
+            <p class="mb-6">
+              Somewhere along that journey, I built this app.<br>
+              It’s nothing fancy, just something I made with care and love <br>
+              for a community that means a lot to me.
+            </p>
+
+            <p class="mb-6">
+              Pride Frame lets you create a pride-themed profile picture<br>
+              to celebrate who you are, or what you stand for.
+              <br>
+              I made this not only for LGBTQ+ folks who want to celebrate their identity,<br>
+              but also for allies who want to show their support with pride.
+            </p>
+
+            <p class="mb-6">
+              Because visibility matters. <br>And sometimes, just one profile picture can start a conversation,<br>
+              send a signal, or offer someone a sense of belonging.
+            </p>
+              <p class="mt-8 text-center">
+              Thanks for stopping by, and for being part of this.
+            </p>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
   </div>
 </template>
 
